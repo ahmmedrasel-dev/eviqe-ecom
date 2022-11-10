@@ -2,6 +2,7 @@ import React from 'react';
 import { Badge, Button, Card, Col } from 'react-bootstrap';
 import ReactStars from 'react-rating-stars-component';
 import { Link } from 'react-router-dom';
+import { RiShoppingCart2Fill } from "react-icons/ri";
 
 const Product = ({ product }) => {
   const { name, price, img, category, seller, slug, ratings, ratingsCount } = product;
@@ -13,9 +14,19 @@ const Product = ({ product }) => {
         <Card.Img variant="top" src={img} />
         <Card.Body>
           <Card.Title>
-            <Link to={`/product/${slug}`}>{name}</Link>
+            <Link to={`/product/${slug}`}>{name.length < 20 ? name : name.slice(0, 20) + '...'}</Link>
           </Card.Title>
-          <div>
+
+          <Card.Text>
+
+            <p> Category: {category}</p>
+            <p>Seller: {seller}</p>
+            <p> Price: {price}</p>
+
+            <p>Total <Badge bg="secondary">{ratingsCount}</Badge> Rattings</p>
+          </Card.Text>
+          <div className='d-flex justify-content-between'>
+            <Button variant="primary">Add to Cart <RiShoppingCart2Fill /></Button>
             <ReactStars
               count={5}
               value={ratings}
@@ -23,17 +34,9 @@ const Product = ({ product }) => {
               size={24}
               activeColor="#ffd700"
             />
-            Total <Badge bg="secondary">{ratingsCount}</Badge> Rattings
+
           </div>
-          <Card.Text>
 
-            Category: {category}
-            Seller: {seller}
-            Price: {price}
-
-
-          </Card.Text>
-          <Button variant="primary">Add to Cart</Button>
         </Card.Body>
       </Card>
     </Col >
