@@ -13,6 +13,7 @@ const reducer = (state, action) => {
     case 'ADD_CART_ITEM':
       const newItem = action.payload;
       const exisitngItem = state.cart.cartItems.find(item => item._id === newItem._id);
+      // cart items er arry moddy data gulo rakha hoitechy carItems variable dia.
       const cartItems = exisitngItem ? state.cart.cartItems.map(item => item._id === exisitngItem._id ? newItem : item) : [...state.cart.cartItems, newItem]
 
       return { ...state, cart: { ...state.cart, cartItems } }
