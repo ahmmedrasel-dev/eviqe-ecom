@@ -52,15 +52,15 @@ const ProductDetails = () => {
   const { cart } = state;
   const handleAddToCart = async () => {
     const existingItem = cart.cartItems.find(item => item._id === product._id);
-    const quantity = existingItem ? existingItem.quantity + 1 : 1;
+    const quantity = existingItem ? existingItem.quantity + 1 : 1
 
-    const data = await axios.get(`http://localhost:8000/products/${product._id}`);
-    console.log(data.data);
+    const { data } = await axios.get(`http://localhost:8000/products/${product._id}`);
 
-    // if (data.stock < quantity) {
-    //   alert(`${product.name} out of stock!`)
-    //   return;
-    // }
+
+    if (data.stock < quantity) {
+      alert(`${product.name} out of stock!`)
+      return;
+    }
     ctxDispatch({
       type: 'ADD_CART_ITEM',
       payload: { ...product, quantity: 1 }

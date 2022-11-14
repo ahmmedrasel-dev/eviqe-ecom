@@ -1,13 +1,33 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Badge, Button, Card, Col } from 'react-bootstrap';
 import ReactStars from 'react-rating-stars-component';
 import { Link } from 'react-router-dom';
 import { RiShoppingCart2Fill } from "react-icons/ri";
 import { Helmet } from 'react-helmet-async';
+import { Store } from '../../../Store';
+import axios from 'axios';
 
 const Product = ({ product }) => {
-  const { name, price, img, category, seller, slug, ratings, ratingsCount } = product;
+  const { name, price, img, category, seller, slug, ratings, ratingsCount, stock, _id } = product;
 
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+
+  const { cart } = state;
+  const handleAddToCart = async id => {
+    const existingItem = cart.cartItems.find(item => item._id === id);
+    const quantity = existingItem ? existingItem.quantity + 1 : 1
+
+    const { data } = await axios.get(`http://localhost:8000/products/${id}`);
+
+    if (data.stock < quantity) {
+      alert(`${name} out of stock!`)
+      return;
+    }
+    ctxDispatch({
+      type: 'ADD_CART_ITEM',
+      payload: { ...product, quantity: 1 }
+    })
+  }
 
   return (
     <Col md={3} className="my-5">
@@ -26,11 +46,12 @@ const Product = ({ product }) => {
             <p> Category: {category}</p>
             <p>Seller: {seller}</p>
             <p> Price: {price}</p>
+            <p> Stock: {stock}</p>
 
             <p>Total <Badge bg="secondary">{ratingsCount}</Badge> Rattings</p>
           </Card.Text>
           <div className='d-flex justify-content-between'>
-            <Button variant="primary">Add to Cart <RiShoppingCart2Fill /></Button>
+            <Button variant="primary" onClick={() => handleAddToCart(_id)}>Add to Cart <RiShoppingCart2Fill /></Button>
             <ReactStars
               count={5}
               value={ratings}
