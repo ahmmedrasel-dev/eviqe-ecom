@@ -1,9 +1,12 @@
-import React from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import React, { useContext } from 'react';
+import { Badge, Container, Nav, Navbar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { Store } from '../../Store';
 import './header.css';
 
 const Header = () => {
+  const { state } = useContext(Store);
+  const { cart } = state;
   return (
     <Navbar bg="dark" variant="dark">
       <Container>
@@ -11,6 +14,15 @@ const Header = () => {
         <Nav className="ms-auto menu">
           <Link to="/">Home</Link>
           <Link to="/product">Product</Link>
+          <Link to="/cart">Cart
+            {
+              cart.cartItems.length > 0 && (
+                <Badge pill bg="danger">
+                  {cart.cartItems.length}
+                </Badge>
+              )
+            }
+          </Link>
         </Nav>
       </Container>
     </Navbar>

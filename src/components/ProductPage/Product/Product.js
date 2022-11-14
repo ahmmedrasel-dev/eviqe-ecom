@@ -3,6 +3,7 @@ import { Badge, Button, Card, Col } from 'react-bootstrap';
 import ReactStars from 'react-rating-stars-component';
 import { Link } from 'react-router-dom';
 import { RiShoppingCart2Fill } from "react-icons/ri";
+import { Helmet } from 'react-helmet-async';
 
 const Product = ({ product }) => {
   const { name, price, img, category, seller, slug, ratings, ratingsCount } = product;
@@ -10,6 +11,9 @@ const Product = ({ product }) => {
 
   return (
     <Col md={3} className="my-5">
+      <Helmet>
+        <title>Prodct Page</title>
+      </Helmet>
       <Card>
         <Card.Img variant="top" src={img} />
         <Card.Body>

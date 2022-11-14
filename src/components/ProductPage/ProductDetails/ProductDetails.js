@@ -1,10 +1,14 @@
 import axios from 'axios';
-import React, { useEffect, useReducer } from 'react';
+import React, { useContext, useEffect, useReducer } from 'react';
 import { Badge, Button, Col, Container, Row, Spinner } from 'react-bootstrap';
 import ReactStars from 'react-rating-stars-component';
 import { useParams } from 'react-router-dom';
 import './productDetails.css';
 import { RiShoppingCart2Fill } from "react-icons/ri";
+import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
+import InnerImageZoom from 'react-inner-image-zoom';
+import { Helmet } from 'react-helmet-async';
+import { Store } from '../../../Store';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -41,19 +45,44 @@ const ProductDetails = () => {
       }
     }
     getProduct()
-  }, [])
+  }, [slug])
+
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+
+  const { cart } = state;
+  const handleAddToCart = async () => {
+    const existingItem = cart.cartItems.find(item => item._id === product._id);
+    const quantity = existingItem ? existingItem.quantity + 1 : 1;
+
+    const data = await axios.get(`http://localhost:8000/products/${product._id}`);
+    console.log(data.data);
+
+    // if (data.stock < quantity) {
+    //   alert(`${product.name} out of stock!`)
+    //   return;
+    // }
+    ctxDispatch({
+      type: 'ADD_CART_ITEM',
+      payload: { ...product, quantity: 1 }
+    })
+  }
 
   return (
     <Container className='mt-3'>
+      <Helmet>
+        <title>{name}</title>
+      </Helmet>
       {
 
-        loading ? <div className='loader'>
-          < Spinner animation="grow" />
-        </div> :
+        loading ?
+          <div className='loader'>
+            < Spinner animation="grow" />
+          </div> :
           <Row>
+
             <Col md={6}>
               <div className='product-feature'>
-                <img src={img} alt="" className='img-fluid rounded' />
+                <InnerImageZoom src={img} className='img-fluid rounded' zoomSrc={img} />
               </div>
             </Col>
             <Col md={6}>
@@ -79,7 +108,7 @@ const ProductDetails = () => {
                 <h3 className='mb-5'>Product Price: ${price}</h3>
 
                 <p>
-                  <Button variant="dark">Add To Cart <RiShoppingCart2Fill /></Button>
+                  <Button variant="dark" onClick={handleAddToCart}>Add To Cart <RiShoppingCart2Fill /></Button>
                 </p>
               </div>
             </Col>
