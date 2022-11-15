@@ -32,9 +32,42 @@ const reducer = (state, action) => {
   }
 }
 
+//==================================
+
+const initialSate2 = {
+  wishlist: {
+    wishlistItems: localStorage.getItem('wishlistItems') ? JSON.parse(localStorage.getItem('wishlistItems')) : [],
+  }
+}
+
+const reducer2 = (state, action) => {
+  switch (action.type) {
+    case 'ADD_WISHLIST_ITEM':
+      const newItem = action.payload;
+      const exisitngItem = state.wishlist.wishlistItems.find(item => item._id === newItem._id);
+      // wishlist items er arry moddy data gulo rakha hoitechy wishlistItems variable dia.
+      const wishlistItems = exisitngItem ? state.wishlist.wishlistItems.map(item => item._id === exisitngItem._id ? newItem : item) : [...state.wishlist.wishlistItems, newItem]
+      localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems))
+      return { ...state, wishlist: { ...state.wishlist, wishlistItems } }
+
+
+    case 'REMOVE_WISHLIST_ITEM': {
+      const removeItem = action.payload;
+      const wishlistItems = state.wishlist.wishlistItems.filter(item => item._id !== removeItem._id);
+      localStorage.setItem('wishlistItems', JSON.stringify(wishlistItems))
+      return { ...state, wishlist: { ...state.wishlist, wishlistItems } }
+    }
+
+    default:
+      return state;
+  }
+}
+
 const StoreProvider = props => {
   const [state, dispatch] = useReducer(reducer, initialSate);
-  const value = { state, dispatch };
+  const [state2, dispatch2] = useReducer(reducer2, initialSate2);
+
+  const value = { state, dispatch, state2, dispatch2 };
   return <Store.Provider value={value}>{props.children}</Store.Provider>
 }
 

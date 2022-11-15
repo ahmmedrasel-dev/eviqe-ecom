@@ -54,7 +54,7 @@ const Header = () => {
               )
             }
           </Button>
-
+          <Link to='/wishlist'>Wishlist</Link>
           <Link to="/cart">Cart
             {
               cartItems.length > 0 && (

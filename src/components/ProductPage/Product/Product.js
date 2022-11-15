@@ -7,11 +7,12 @@ import { Helmet } from 'react-helmet-async';
 import { Store } from '../../../Store';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { BsHeart } from 'react-icons/bs';
 
 const Product = ({ product }) => {
   const { name, price, img, category, seller, slug, ratings, ratingsCount, stock, _id } = product;
 
-  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { state, dispatch: ctxDispatch, dispatch2 } = useContext(Store);
 
   const { cart } = state;
   const handleAddToCart = async id => {
@@ -33,6 +34,16 @@ const Product = ({ product }) => {
     toast.success('Product Add to Cart')
   }
 
+  const handleWishlist = () => {
+
+    dispatch2({
+      type: 'ADD_WISHLIST_ITEM',
+      payload: { ...product },
+
+    })
+    toast.success('Product Add to Wishlist!')
+  }
+
   return (
     <Col md={3} className='mb-4'>
       <Helmet>
@@ -42,7 +53,18 @@ const Product = ({ product }) => {
         <Card.Img variant="top" src={img} />
         <Card.Body>
           <Card.Title>
-            <Link className='text-dark' to={`/product/${slug}`}>{name.length < 20 ? name : name.slice(0, 20) + '...'}</Link>
+            <Link className='text-dark mb-2' to={`/product/${slug}`}>{name.length < 20 ? name : name.slice(0, 20) + '...'}</Link>
+
+            <ReactStars
+              className='mt-2'
+              count={5}
+              value={ratings}
+              edit={false}
+              size={24}
+              activeColor="#ffd700"
+            />
+
+            <p className='mt-2'>Total <Badge bg="secondary">{ratingsCount}</Badge> Rattings</p>
           </Card.Title>
 
           <Card.Text>
@@ -52,23 +74,17 @@ const Product = ({ product }) => {
             <p> Price: {price}</p>
             <p> Stock: {stock}</p>
 
-            <p>Total <Badge bg="secondary">{ratingsCount}</Badge> Rattings</p>
+
           </Card.Text>
-          <div className='d-flex justify-content-between'>
+          <div className='d-flex justify-content-between align-items-center'>
             {
               stock < 1 ?
                 <Button disabled={stock === 0 && true} variant="danger">Out of Stock</Button>
                 :
                 <Button variant="dark" onClick={() => handleAddToCart(_id)}>Add to Cart <RiShoppingCart2Fill /></Button>
             }
-            <ReactStars
-              count={5}
-              value={ratings}
-              edit={false}
-              size={24}
-              activeColor="#ffd700"
-            />
 
+            <Button variant="link" onClick={handleWishlist}><BsHeart /></Button>
           </div>
 
         </Card.Body>
