@@ -9,6 +9,8 @@ import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css';
 import InnerImageZoom from 'react-inner-image-zoom';
 import { Helmet } from 'react-helmet-async';
 import { Store } from '../../../Store';
+import Breadcums from '../../Breadcums/Breadcums';
+import { toast } from 'react-toastify';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -65,10 +67,11 @@ const ProductDetails = () => {
       type: 'ADD_CART_ITEM',
       payload: { ...product, quantity: 1 }
     })
+    toast.success('Product Add to Cart!')
   }
 
   return (
-    <Container className='mt-3'>
+    <Container>
       <Helmet>
         <title>{name}</title>
       </Helmet>
@@ -78,8 +81,8 @@ const ProductDetails = () => {
           <div className='loader'>
             < Spinner animation="grow" />
           </div> :
-          <Row>
-
+          <Row className="my-3">
+            <Breadcums page={slug}></Breadcums>
             <Col md={6}>
               <div className='product-feature'>
                 <InnerImageZoom src={img} className='img-fluid rounded' zoomSrc={img} />

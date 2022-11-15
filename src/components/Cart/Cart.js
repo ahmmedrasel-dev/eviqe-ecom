@@ -4,6 +4,9 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { Store } from '../../Store';
 import { FiTrash2 } from "react-icons/fi";
+import './cart.css'
+import Breadcums from '../Breadcums/Breadcums';
+import { toast } from 'react-toastify';
 const Cart = () => {
   const { state, dispatch } = useContext(Store)
   const { cart: { cartItems } } = state;
@@ -13,6 +16,7 @@ const Cart = () => {
       type: 'ADD_CART_ITEM',
       payload: { ...item, quantity }
     })
+    toast.success('Quanity Updated')
   }
 
   const handleRemoveItem = (item) => {
@@ -20,6 +24,7 @@ const Cart = () => {
       type: 'REMOVE_CART_ITEM',
       payload: item
     })
+    toast.warn('Product add to cart')
   }
 
 
@@ -28,10 +33,12 @@ const Cart = () => {
       <Helmet>
         <title>Shopping Cart</title>
       </Helmet>
-      <Row className='mt-5'>
+
+      <Row className='mt-3'>
+        <Breadcums page={'cart'}></Breadcums>
         <Col lg={8}>
           {
-            cartItems.length < 0 ?
+            cartItems.length === 0 ?
               <Alert variant='danger'>
                 Cart is empty
               </Alert>
@@ -70,16 +77,13 @@ const Cart = () => {
           }
         </Col>
         <Col lg={4}>
-          <Card border="primary" style={{ width: '18rem' }}>
+          <Card className='card-summary p-2'>
             <Card.Header><h3 className='text-uppercase'>Cart Summary</h3></Card.Header>
             <Card.Body>
-              <h5>Total Quantity: {cartItems.reduce((accomolator, current) => accomolator + current.quantity, 0)}</h5>
-              <h5>Total Price: ${cartItems.reduce((accomolator, current) => accomolator + current.price * current.quantity, 0)}</h5>
-
-              <div className="d-grid gap-2">
-                <Button class="btn btn-primary" type="button">Checkout</Button>
-              </div>
+              <p>Total Quantity: {cartItems.reduce((accomolator, current) => accomolator + current.quantity, 0)}</p>
+              <p>Total Price: ${cartItems.reduce((accomolator, current) => accomolator + current.price * current.quantity, 0)}</p>
             </Card.Body>
+            <Button className="btn btn-dark checkout" type="button">Checkout</Button>
           </Card>
         </Col>
       </Row>

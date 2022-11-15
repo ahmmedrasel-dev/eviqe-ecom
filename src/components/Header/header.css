@@ -3,3 +3,9 @@
   text-decoration: none;
   margin-left: 20px;
 }
+
+.offCart {
+  position: fixed;
+  right: 0;
+  top: 50%;
+}

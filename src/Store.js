@@ -1,5 +1,6 @@
 import { createContext, useReducer } from "react";
 
+
 const Store = createContext();
 
 const initialSate = {
@@ -17,6 +18,8 @@ const reducer = (state, action) => {
       const cartItems = exisitngItem ? state.cart.cartItems.map(item => item._id === exisitngItem._id ? newItem : item) : [...state.cart.cartItems, newItem]
       localStorage.setItem('cartItems', JSON.stringify(cartItems))
       return { ...state, cart: { ...state.cart, cartItems } }
+
+
     case 'REMOVE_CART_ITEM': {
       const removeItem = action.payload;
       const cartItems = state.cart.cartItems.filter(item => item._id !== removeItem._id);

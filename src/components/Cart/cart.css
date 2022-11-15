@@ -1,0 +1,10 @@
+.card-summary {
+  height: 80vh;
+  position: relative;
+}
+
+.checkout {
+  position: absolute;
+  bottom: 20px;
+  width: 400px;
+}

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useReducer } from 'react';
 import { Container, Row, Spinner } from 'react-bootstrap';
+import Breadcums from '../../Breadcums/Breadcums';
 import Product from '../Product/Product';
 import './products.css';
 
@@ -41,7 +42,8 @@ const Products = () => {
   return (
     <>
       <Container>
-        <Row>
+        <Row className="my-3">
+          <Breadcums page={'Products'}></Breadcums>
           {
             loading ? <div className='loader'>
               <Spinner animation="grow" />
