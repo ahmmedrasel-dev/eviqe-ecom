@@ -9,3 +9,8 @@
   right: 0;
   top: 50%;
 }
+
+.cartCound {
+  position: absolute;
+  top: 0;
+}

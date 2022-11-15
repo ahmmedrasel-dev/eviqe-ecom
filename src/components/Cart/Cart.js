@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Alert, Button, Card, Col, Container, ListGroup, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Store } from '../../Store';
 import { FiTrash2 } from "react-icons/fi";
 import './cart.css'
@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 const Cart = () => {
   const { state, dispatch } = useContext(Store)
   const { cart: { cartItems } } = state;
-
+  const navigate = useNavigate()
   const handleQty = (item, quantity) => {
     dispatch({
       type: 'ADD_CART_ITEM',
@@ -25,6 +25,10 @@ const Cart = () => {
       payload: item
     })
     toast.warn('Product add to cart')
+  }
+
+  const handleCheckout = () => {
+    navigate('/signin?redirect=/shipping');
   }
 
 
@@ -83,7 +87,7 @@ const Cart = () => {
               <p>Total Quantity: {cartItems.reduce((accomolator, current) => accomolator + current.quantity, 0)}</p>
               <p>Total Price: ${cartItems.reduce((accomolator, current) => accomolator + current.price * current.quantity, 0)}</p>
             </Card.Body>
-            <Button className="btn btn-dark checkout" type="button">Checkout</Button>
+            <Button className="btn btn-dark checkout" type="button" onClick={handleCheckout}>Checkout</Button>
           </Card>
         </Col>
       </Row>

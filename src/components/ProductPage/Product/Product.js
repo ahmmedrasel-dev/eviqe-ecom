@@ -55,7 +55,12 @@ const Product = ({ product }) => {
             <p>Total <Badge bg="secondary">{ratingsCount}</Badge> Rattings</p>
           </Card.Text>
           <div className='d-flex justify-content-between'>
-            <Button variant="dark" onClick={() => handleAddToCart(_id)}>Add to Cart <RiShoppingCart2Fill /></Button>
+            {
+              stock < 1 ?
+                <Button disabled={stock === 0 && true} variant="danger">Out of Stock</Button>
+                :
+                <Button variant="dark" onClick={() => handleAddToCart(_id)}>Add to Cart <RiShoppingCart2Fill /></Button>
+            }
             <ReactStars
               count={5}
               value={ratings}

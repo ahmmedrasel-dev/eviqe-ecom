@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
-import { Badge, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Badge, Container, Nav, Navbar } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import { Store } from '../../Store';
 import './header.css';
 import Button from 'react-bootstrap/Button';
@@ -11,7 +11,7 @@ import { FiShoppingCart, FiTrash2 } from "react-icons/fi";
 const Header = () => {
   const { state, dispatch } = useContext(Store);
   const { cart: { cartItems } } = state;
-
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -33,6 +33,10 @@ const Header = () => {
     toast.warn('Product add to cart')
   }
 
+  const handleCheckout = () => {
+    navigate('/signin?redirect=/shipping');
+  }
+
   return (
     <Navbar bg="dark" variant="dark">
       <Container>
@@ -42,6 +46,13 @@ const Header = () => {
           <Link to="/product">Product</Link>
           <Button variant="dark" onClick={handleShow} className="me-2 offCart">
             <FiShoppingCart />
+            {
+              cartItems.length > 0 && (
+                <Badge pill bg="danger" className='cartCound'>
+                  {cartItems.length}
+                </Badge>
+              )
+            }
           </Button>
 
           <Link to="/cart">Cart
@@ -71,10 +82,13 @@ const Header = () => {
                 <Button disabled={item.quantity == item.stock} variant='success' onClick={() => handleQty(item, item.quantity + 1)}>+</Button>
 
                 <Button className='ms-2' variant='danger' onClick={() => handleRemoveItem(item)}><FiTrash2 /></Button>
+
                 <hr />
               </>
             ))
           }
+
+          <Button className="btn btn-dark checkout" type="button" onClick={handleCheckout}>Checkout</Button>
         </Offcanvas.Body>
       </Offcanvas>
     </Navbar>
