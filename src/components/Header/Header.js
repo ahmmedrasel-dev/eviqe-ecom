@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Badge, Container, Nav, Navbar } from 'react-bootstrap';
+import { Badge, Container, Dropdown, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { Store } from '../../Store';
 import './header.css';
@@ -9,8 +9,10 @@ import { toast } from 'react-toastify';
 import { FiShoppingCart, FiTrash2 } from "react-icons/fi";
 
 const Header = () => {
-  const { state, dispatch } = useContext(Store);
+  const { state, dispatch, state3, dispatch3 } = useContext(Store);
   const { cart: { cartItems } } = state;
+  const { userInfo } = state3;
+
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
 
@@ -37,6 +39,11 @@ const Header = () => {
     navigate('/signin?redirect=/shipping');
   }
 
+  const handleLogout = () => {
+    dispatch3({ type: "USER_LOGOUT" });
+    localStorage.removeItem('userInfo');
+  }
+
   return (
     <Navbar bg="dark" variant="dark">
       <Container>
@@ -44,6 +51,7 @@ const Header = () => {
         <Nav className="ms-auto menu">
           <Link to="/">Home</Link>
           <Link to="/product">Product</Link>
+          <Link to="/productCompare">Product Compare</Link>
           <Button variant="dark" onClick={handleShow} className="me-2 offCart">
             <FiShoppingCart />
             {
@@ -64,6 +72,17 @@ const Header = () => {
               )
             }
           </Link>
+          {
+            userInfo ?
+              <>
+                {console.log(userInfo)}
+                <NavDropdown title={userInfo.name} id="basic-nav-dropdown">
+                  <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
+
+                </NavDropdown>
+              </> : <Link to='/login'>Login</Link>
+          }
+
         </Nav>
       </Container>
 
@@ -74,7 +93,7 @@ const Header = () => {
         <Offcanvas.Body>
           {
             cartItems.map(item => (
-              <>
+              <div key={item._id}>
                 <img className='me-2' width="50" src={item.img} alt="" />
                 <Link className='me-2' to={`product/${item.slug}`}>{item.name.slice(0, 10)}</Link>
                 <Button disabled={item.quantity == 1} variant='success' onClick={() => handleQty(item, item.quantity - 1)}>-</Button>
@@ -84,14 +103,14 @@ const Header = () => {
                 <Button className='ms-2' variant='danger' onClick={() => handleRemoveItem(item)}><FiTrash2 /></Button>
 
                 <hr />
-              </>
+              </div>
             ))
           }
 
           <Button className="btn btn-dark checkout" type="button" onClick={handleCheckout}>Checkout</Button>
         </Offcanvas.Body>
       </Offcanvas>
-    </Navbar>
+    </Navbar >
   );
 };
 

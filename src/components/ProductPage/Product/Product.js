@@ -10,16 +10,16 @@ import { toast } from 'react-toastify';
 import { BsHeart } from 'react-icons/bs';
 
 const Product = ({ product }) => {
-  const { name, price, img, category, seller, slug, ratings, ratingsCount, stock, _id } = product;
+  const { name, price, img, category, seller, slug, ratings, ratingsCount, stock } = product;
 
   const { state, dispatch: ctxDispatch, dispatch2 } = useContext(Store);
 
   const { cart } = state;
-  const handleAddToCart = async id => {
-    const existingItem = cart.cartItems.find(item => item._id === id);
+  const handleAddToCart = async slug => {
+    const existingItem = cart.cartItems.find(item => item.slug === slug);
     const quantity = existingItem ? existingItem.quantity + 1 : 1
 
-    const { data } = await axios.get(`http://localhost:8000/products/${id}`);
+    const { data } = await axios.get(`http://localhost:8000/api/products/${slug}`);
 
     if (data.stock < quantity) {
 
@@ -81,7 +81,7 @@ const Product = ({ product }) => {
               stock < 1 ?
                 <Button disabled={stock === 0 && true} variant="danger">Out of Stock</Button>
                 :
-                <Button variant="dark" onClick={() => handleAddToCart(_id)}>Add to Cart <RiShoppingCart2Fill /></Button>
+                <Button variant="dark" onClick={() => handleAddToCart(slug)}>Add to Cart <RiShoppingCart2Fill /></Button>
             }
 
             <Button variant="link" onClick={handleWishlist}><BsHeart /></Button>

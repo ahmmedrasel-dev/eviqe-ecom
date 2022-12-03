@@ -29,7 +29,7 @@ const Products = () => {
     const getProduct = async () => {
       dispatch({ type: 'FETCH_REQUEST' })
       try {
-        const products = await axios.get('http://localhost:8000/products');
+        const products = await axios.get('http://localhost:8000/api/products');
         dispatch({ type: 'FETCH_SUCCESS', payload: products.data })
 
       } catch (error) {
@@ -42,7 +42,7 @@ const Products = () => {
   return (
     <>
       <Container>
-        <Row className="my-3">
+        <Row>
           <Breadcums page={'Products'}></Breadcums>
           {
             loading ? <div className='loader'>

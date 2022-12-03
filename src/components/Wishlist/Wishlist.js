@@ -17,7 +17,7 @@ const Wishlist = () => {
     const existingItem = cartItems.find(item => item._id === product.id);
     const quantity = existingItem ? existingItem.quantity + 1 : 1
 
-    const { data } = await axios.get(`http://localhost:8000/products/${product.id}`);
+    const { data } = await axios.get(`http://localhost:8000/api/products/${product.id}`);
 
     if (data.stock < quantity) {
 

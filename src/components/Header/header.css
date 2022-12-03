@@ -14,3 +14,20 @@
   position: absolute;
   top: 0;
 }
+
+.nav-link {
+  display: unset !important;
+}
+
+.navbar-expand .navbar-nav .dropdown-menu {
+  position: absolute;
+  background: #212529;
+  top: 41px;
+}
+
+.dropdown-item:focus,
+.dropdown-item:hover {
+  color: #f4f6f8;
+  display: unset;
+  background-color: unset;
+}

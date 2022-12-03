@@ -63,11 +63,28 @@ const reducer2 = (state, action) => {
   }
 }
 
+
+const userInitialSate = {
+  userInfo: localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null
+}
+
+const userReducer = (state, action) => {
+  switch (action.type) {
+    case 'USER_LOGIN':
+      return { ...state, userInfo: action.payload };
+    case 'USER_LOGOUT':
+      return { ...state, userInfo: null }
+    default:
+      return state;
+  }
+}
+
 const StoreProvider = props => {
   const [state, dispatch] = useReducer(reducer, initialSate);
   const [state2, dispatch2] = useReducer(reducer2, initialSate2);
+  const [state3, dispatch3] = useReducer(userReducer, userInitialSate);
 
-  const value = { state, dispatch, state2, dispatch2 };
+  const value = { state, dispatch, state2, dispatch2, state3, dispatch3 };
   return <Store.Provider value={value}>{props.children}</Store.Provider>
 }
 
