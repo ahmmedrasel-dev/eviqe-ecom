@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import Login from "./components/Login/Login";
 import Wishlist from "./components/Wishlist/Wishlist";
 import ProductCompare from "./components/ProductCompare/ProductCompare";
+import Shipping from "./components/Shipping/Shipping";
 
 function App() {
   return (
@@ -22,7 +23,8 @@ function App() {
         <Route path="/productCompare" element={<ProductCompare></ProductCompare>}></Route>
         <Route path="/wishlist" element={<Wishlist></Wishlist>}></Route>
         <Route path="/cart" element={<Cart></Cart>}></Route>
-        <Route path="/login" element={<Login></Login>}></Route>
+        <Route path="/signin" element={<Login></Login>}></Route>
+        <Route path="/shipping" element={<Shipping></Shipping>}></Route>
         <Route path="*/" element={<NotFound></NotFound>}></Route>
       </Routes>
       <ToastContainer />

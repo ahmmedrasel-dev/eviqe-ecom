@@ -80,7 +80,7 @@ const Header = () => {
                   <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
 
                 </NavDropdown>
-              </> : <Link to='/login'>Login</Link>
+              </> : <Link to='/signin'>Login</Link>
           }
 
         </Nav>
