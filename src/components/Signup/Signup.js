@@ -32,7 +32,7 @@ const Signup = () => {
       });
       dispatch3({ type: 'USER_LOGIN', payload: data })
       localStorage.setItem('userInfo', JSON.stringify(data))
-      navigate(redirect || '/')
+      navigate('/signin')
     } catch (error) {
       toast.error('Does not match user Credential!', {
         position: "bottom-right",
