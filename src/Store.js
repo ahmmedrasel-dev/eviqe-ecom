@@ -81,13 +81,13 @@ const userReducer = (state, action) => {
 
 
 const shippingInitialSate = {
-  shippingInfo: localStorage.getItem('shippingInfo') ? JSON.parse(localStorage.getItem('shippingInfo')) : {}
+  shipping_info: localStorage.getItem('shipping_info') ? JSON.parse(localStorage.getItem('shipping_info')) : {}
 }
 
 const shippingReducer = (state, action) => {
   switch (action.type) {
     case 'SHIPPING_INFO':
-      return { ...state, shippingInfo: action.payload };
+      return { ...state, shipping_info: action.payload };
 
     default:
       return state;
@@ -100,7 +100,7 @@ const StoreProvider = props => {
   const [state3, dispatch3] = useReducer(userReducer, userInitialSate);
   const [state4, dispatch4] = useReducer(shippingReducer, shippingInitialSate);
 
-  const value = { state, dispatch, state2, dispatch2, state3, dispatch3 };
+  const value = { state, dispatch, state2, dispatch2, state3, dispatch3, dispatch4, state4 };
   return <Store.Provider value={value}>{props.children}</Store.Provider>
 }
 

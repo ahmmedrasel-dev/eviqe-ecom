@@ -75,7 +75,6 @@ const Header = () => {
           {
             userInfo ?
               <>
-                {console.log(userInfo)}
                 <NavDropdown title={userInfo.name} id="basic-nav-dropdown">
                   <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
 

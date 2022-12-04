@@ -1,20 +1,24 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { Store } from '../../Store';
 import Breadcums from '../Breadcums/Breadcums';
+import CheckoutStep from '../Checkout/CheckoutStep';
 
 const Shipping = () => {
-  const [fullname, setFullname] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [postalcode, setPostalcode] = useState("");
-  const [country, setCountry] = useState("");
-  const [city, setCity] = useState("");
+  const { dispatch4, state3, state4 } = useContext(Store);
+  const { shipping_info } = state4;
+  console.log(state4);
+  const [fullname, setFullname] = useState(shipping_info.fullname || "");
+  const [phone, setPhone] = useState(shipping_info.phone || "");
+  const [address, setAddress] = useState(shipping_info.address || "");
+  const [postalcode, setPostalcode] = useState(shipping_info.postalcode || "");
+  const [country, setCountry] = useState(shipping_info.country || "");
+  const [city, setCity] = useState(shipping_info.city || "");
   const navigate = useNavigate();
 
-  const { state4, dispatch4 } = useContext(Store);
+  const { userInfo } = state3;
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -39,11 +43,23 @@ const Shipping = () => {
     }))
     navigate('/payment')
   }
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate('/signin?redirect=/shipping')
+    }
+  }, [])
   return (
     <>
       <Container className=''>
         <Row className='justify-content-md-center my-4'>
           <Breadcums page={'Shipping'}></Breadcums>
+          <CheckoutStep
+            stepOne={true}
+            stepTwo={true}
+            stepThree={true}
+            stepFour={true}
+          ></CheckoutStep>
           <Helmet>
             <title>Shipping Page</title>
           </Helmet>

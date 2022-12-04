@@ -50,7 +50,7 @@ const Login = () => {
     <Container className='w-25 border p-3 rounded login-form'>
       <Form onSubmit={handleSubmit}>
         <Alert className='text-center'>
-          Login
+          <h4>User Login</h4>
         </Alert>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
