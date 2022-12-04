@@ -9,14 +9,14 @@ import CheckoutStep from '../Checkout/CheckoutStep';
 const Shipping = () => {
   const { dispatch4, state3, state4 } = useContext(Store);
   const { shipping_info } = state4;
-  console.log(state4);
+  const navigate = useNavigate();
   const [fullname, setFullname] = useState(shipping_info.fullname || "");
   const [phone, setPhone] = useState(shipping_info.phone || "");
   const [address, setAddress] = useState(shipping_info.address || "");
   const [postalcode, setPostalcode] = useState(shipping_info.postalcode || "");
   const [country, setCountry] = useState(shipping_info.country || "");
   const [city, setCity] = useState(shipping_info.city || "");
-  const navigate = useNavigate();
+
 
   const { userInfo } = state3;
 
@@ -46,20 +46,16 @@ const Shipping = () => {
 
   useEffect(() => {
     if (!userInfo) {
-      navigate('/signin?redirect=/shipping')
+      navigate('/signin')
     }
   }, [])
+
   return (
     <>
       <Container className=''>
         <Row className='justify-content-md-center my-4'>
           <Breadcums page={'Shipping'}></Breadcums>
-          <CheckoutStep
-            stepOne={true}
-            stepTwo={true}
-            stepThree={true}
-            stepFour={true}
-          ></CheckoutStep>
+
           <Helmet>
             <title>Shipping Page</title>
           </Helmet>

@@ -25,14 +25,12 @@ const Signup = () => {
     e.preventDefault();
 
     try {
-      const { data } = await axios.post('http://localhost:8000/api/user/signup', {
+      await axios.post('http://localhost:8000/api/user/signup', {
         name,
         email,
         password
       });
-      dispatch3({ type: 'USER_LOGIN', payload: data })
-      localStorage.setItem('userInfo', JSON.stringify(data))
-      navigate('/signin')
+      navigate('/signin', { state: 'Please SignIn !' })
     } catch (error) {
       toast.error('Does not match user Credential!', {
         position: "bottom-right",

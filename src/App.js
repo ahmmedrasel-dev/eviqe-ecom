@@ -12,6 +12,7 @@ import Wishlist from "./components/Wishlist/Wishlist";
 import ProductCompare from "./components/ProductCompare/ProductCompare";
 import Shipping from "./components/Shipping/Shipping";
 import Signup from "./components/Signup/Signup";
+import Payment from "./components/Payment/Payment";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/productCompare" element={<ProductCompare></ProductCompare>}></Route>
         <Route path="/wishlist" element={<Wishlist></Wishlist>}></Route>
         <Route path="/cart" element={<Cart></Cart>}></Route>
+        <Route path="/payment" element={<Payment></Payment>}></Route>
         <Route path="/signin" element={<Login></Login>}></Route>
         <Route path="/signup" element={<Signup></Signup>}></Route>
         <Route path="/shipping" element={<Shipping></Shipping>}></Route>

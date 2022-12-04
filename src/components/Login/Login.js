@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { search } = useLocation();
+  const { search, state } = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // Getting Serch value from url
@@ -17,6 +17,10 @@ const Login = () => {
 
   const { dispatch3, state3 } = useContext(Store);
   const { userInfo } = state3;
+
+  if (state) {
+    toast.success(state)
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -45,7 +49,8 @@ const Login = () => {
     if (userInfo) {
       navigate(redirect);
     }
-  }, [])
+  }, []);
+
   return (
     <Container className='w-25 border p-3 rounded login-form'>
       <Form onSubmit={handleSubmit}>
