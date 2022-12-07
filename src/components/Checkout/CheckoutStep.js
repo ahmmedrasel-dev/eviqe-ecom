@@ -5,8 +5,7 @@ import './checkoutStep.css';
 const CheckoutStep = ({ stepOne, stepTwo, stepThree, stepFour }) => {
   return (
     <Container>
-
-      <Row className='mx-5 my-3'>
+      <Row className='mx-5 my-3 all-step'>
         <Col>
           <h4 className={stepOne ? 'stepComplete' : ''}>Sign In</h4>
         </Col>

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Badge, Container, Dropdown, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Badge, Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { Store } from '../../Store';
 import './header.css';

@@ -13,6 +13,7 @@ import ProductCompare from "./components/ProductCompare/ProductCompare";
 import Shipping from "./components/Shipping/Shipping";
 import Signup from "./components/Signup/Signup";
 import Payment from "./components/Payment/Payment";
+import Placeorder from "./components/PlaceOrder/Placeorder";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/signin" element={<Login></Login>}></Route>
         <Route path="/signup" element={<Signup></Signup>}></Route>
         <Route path="/shipping" element={<Shipping></Shipping>}></Route>
+        <Route path="/placeorder" element={<Placeorder></Placeorder>}></Route>
         <Route path="*/" element={<NotFound></NotFound>}></Route>
       </Routes>
       <ToastContainer />

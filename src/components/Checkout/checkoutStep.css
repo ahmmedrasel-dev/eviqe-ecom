@@ -5,3 +5,10 @@
   border-radius: 5px;
   text-align: center;
 }
+
+.all-step h4{
+  text-align: center;
+  padding: 10px 20px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
