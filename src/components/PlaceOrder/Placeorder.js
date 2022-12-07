@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Alert, Button, Card, Col, Container, Form, ListGroup, Modal, Row } from 'react-bootstrap';
+import axios from 'axios';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
+import { Button, Card, Col, Container, Form, ListGroup, Modal, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
 import { FiTrash2 } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,8 +9,25 @@ import { Store } from '../../Store';
 import Breadcums from '../Breadcums/Breadcums';
 import CheckoutStep from '../Checkout/CheckoutStep';
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'CREATE_REQUEST':
+      return { ...state, loading: true }
+    case 'CREATE_SUCCESS':
+      return { ...state, loading: false }
+    case 'CREATE_FAIL':
+      return { ...state, loading: false }
+    default:
+      return state;
+  }
+}
+
 const Placeorder = () => {
 
+  const [{ loading, error }, orderDispatch] = useReducer(reducer, {
+    loading: false,
+    error: ''
+  })
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -70,6 +88,31 @@ const Placeorder = () => {
   let totalPrice = cartItems.reduce((accomolator, current) => accomolator + current.price * current.quantity, 0);
   let tax = totalPrice < 500 ? 0 : (totalPrice * 7) / 100;
 
+  const handleOrder = async () => {
+    try {
+      const { data } = await axios.post('http://localhost:8000/api/order', {
+        orderItems: cartItems,
+        shippingAddress: shipping_info,
+        paymentMethod: state5.paymentMethod,
+        productPrice: totalPrice,
+        tax: tax,
+        shippingPrice: 0,
+        totalPrice: totalPrice + tax,
+      }, {
+        headers: {
+          authorization: `Bearer ${state3.userInfo.token}`
+        }
+      });
+      dispatch({ type: 'CLEAR_CART' });
+      orderDispatch({ type: 'CREATE_SUCCESS' })
+      localStorage.removeItem('cartItems');
+      navigate(`/order/${data.order._id}`);
+    } catch (err) {
+      orderDispatch({ type: "CREATE_FAIL" })
+      toast.error(err);
+    }
+  }
+
   useEffect(() => {
     if (!state3.userInfo) {
       dispatch3({ type: "USER_LOGOUT" });
@@ -88,7 +131,7 @@ const Placeorder = () => {
         <Helmet>
           <title>Placeorder</title>
         </Helmet>
-        <Col md={6}>
+        <Col md={8}>
           <Card>
             <Card.Body>
               <Card.Title>Shipping Information</Card.Title>
@@ -102,8 +145,8 @@ const Placeorder = () => {
                 <strong>Country: </strong>{shipping_info.country} <br />
               </Card.Text>
               <hr />
-              <Button variant="dark" className='me-3' onClick={handleShow}>Edit</Button>
-              <Link to="/payment"><Button variant="warning">Edit Payment</Button></Link>
+              <Button variant="dark" className='me-3' onClick={handleShow}>Edit Shipping</Button>
+
             </Card.Body>
           </Card>
 
@@ -150,7 +193,7 @@ const Placeorder = () => {
           </Card>
         </Col>
 
-        <Col md={6}>
+        <Col md={4}>
           <Card className='mb-3'>
             <Card.Body>
               <Card.Title>Selected Payment</Card.Title>
@@ -158,6 +201,8 @@ const Placeorder = () => {
               <Card.Text>
                 <strong>Payment Method: </strong>{state5.paymentMethod.toUpperCase()} <br />
               </Card.Text>
+              <hr />
+              <Link to="/payment"><Button variant="warning">Edit Payment</Button></Link>
 
               <hr />
               <Card.Title>
@@ -165,13 +210,15 @@ const Placeorder = () => {
               </Card.Title>
               <hr />
               <Card.Text>
-                <strong>Product Price: </strong>${totalPrice} <br />
-                <strong>Shipping Cost: </strong>$0 <br />
-                <strong>Tax: </strong>${tax} <br />
-                <strong>Total Amount: $</strong>{totalPrice + tax} <br />
+                <ListGroup>
+                  <ListGroup.Item> Product Price: ${totalPrice}</ListGroup.Item>
+                  <ListGroup.Item> Shipping Cost: $0</ListGroup.Item>
+                  <ListGroup.Item> Tax: ${tax}</ListGroup.Item>
+                  <ListGroup.Item> Total Amount: ${totalPrice + tax}</ListGroup.Item>
+                </ListGroup>
               </Card.Text>
 
-              <Button variant='dark'>Place Order</Button>
+              <Button variant='dark' onClick={handleOrder}>Place Order</Button>
             </Card.Body>
 
           </Card>
