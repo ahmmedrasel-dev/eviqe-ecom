@@ -1,7 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Card, Col, Container, Form, Modal, Row } from 'react-bootstrap';
+import { Alert, Button, Card, Col, Container, Form, ListGroup, Modal, Row } from 'react-bootstrap';
 import { Helmet } from 'react-helmet-async';
+import { FiTrash2 } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Store } from '../../Store';
 import Breadcums from '../Breadcums/Breadcums';
 import CheckoutStep from '../Checkout/CheckoutStep';
@@ -13,8 +15,8 @@ const Placeorder = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const { state4, dispatch4, state3, dispatch3, state5 } = useContext(Store);
-
+  const { state4, dispatch4, state3, dispatch3, state5, state, dispatch } = useContext(Store);
+  const { cart: { cartItems } } = state;
   const { shipping_info } = state4;
 
   const [fullname, setFullname] = useState(shipping_info.fullname || "");
@@ -49,6 +51,25 @@ const Placeorder = () => {
     // navigate('/payment')
   }
 
+  const handleQty = (item, quantity) => {
+    dispatch({
+      type: 'ADD_CART_ITEM',
+      payload: { ...item, quantity }
+    })
+    toast.success('Quanity Updated')
+  }
+
+  const handleRemoveItem = (item) => {
+    dispatch({
+      type: 'REMOVE_CART_ITEM',
+      payload: item
+    })
+    toast.warn('Product add to cart')
+  }
+
+  let totalPrice = cartItems.reduce((accomolator, current) => accomolator + current.price * current.quantity, 0);
+  let tax = totalPrice < 500 ? 0 : (totalPrice * 7) / 100;
+
   useEffect(() => {
     if (!state3.userInfo) {
       dispatch3({ type: "USER_LOGOUT" });
@@ -56,6 +77,8 @@ const Placeorder = () => {
       navigate('/signin')
     }
   }, [])
+
+
 
   return (
     <Container>
@@ -79,15 +102,78 @@ const Placeorder = () => {
                 <strong>Country: </strong>{shipping_info.country} <br />
               </Card.Text>
               <hr />
-              <Card.Title>Selected Payment</Card.Title>
-              <hr />
-
-              <Card.Text>
-                <strong>Payment Method: </strong>{state5.paymentMethod.toUpperCase()} <br />
-              </Card.Text>
               <Button variant="dark" className='me-3' onClick={handleShow}>Edit</Button>
               <Link to="/payment"><Button variant="warning">Edit Payment</Button></Link>
             </Card.Body>
+          </Card>
+
+          <Card className='mt-3'>
+            <Card.Body>
+              <Card.Title>Cart Items:</Card.Title>
+              <hr />
+              <Card.Text>
+                {
+                  cartItems &&
+                  <ListGroup>
+                    {
+                      cartItems.map(item => (
+                        <ListGroup.Item>
+
+                          <Row className='align-items-center'>
+                            <Col lg={1}>
+                              <img src={item.img} width="80px" className='rounded' alt="" />
+                            </Col>
+
+                            <Col lg={6}>
+                              <Link to={`/cartproduct/${item._id}`} className="mx-5">{item.name.slice(0, 15)}</Link>
+                            </Col>
+
+                            <Col lg={3}>
+                              <Button disabled={item.quantity == 1} variant='success' onClick={() => handleQty(item, item.quantity - 1)}>-</Button>
+                              <span className='mx-3'>{item.quantity}</span>
+                              <Button disabled={item.quantity === item.stock} variant='success' onClick={() => handleQty(item, item.quantity + 1)}>+</Button>
+
+                            </Col>
+
+                            <Col lg={2}>
+                              <Button variant='danger' onClick={() => handleRemoveItem(item)}><FiTrash2 /></Button>
+                            </Col>
+
+                          </Row>
+                        </ListGroup.Item>
+                      ))
+                    }
+                  </ListGroup>
+                }
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Col>
+
+        <Col md={6}>
+          <Card className='mb-3'>
+            <Card.Body>
+              <Card.Title>Selected Payment</Card.Title>
+              <hr />
+              <Card.Text>
+                <strong>Payment Method: </strong>{state5.paymentMethod.toUpperCase()} <br />
+              </Card.Text>
+
+              <hr />
+              <Card.Title>
+                <Card.Title>Payment Summary:</Card.Title>
+              </Card.Title>
+              <hr />
+              <Card.Text>
+                <strong>Product Price: </strong>${totalPrice} <br />
+                <strong>Shipping Cost: </strong>$0 <br />
+                <strong>Tax: </strong>${tax} <br />
+                <strong>Total Amount: $</strong>{totalPrice + tax} <br />
+              </Card.Text>
+
+              <Button variant='dark'>Place Order</Button>
+            </Card.Body>
+
           </Card>
         </Col>
       </Row>
